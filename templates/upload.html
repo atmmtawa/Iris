@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>CSV Upload and Predict</title>
+</head>
+<body>
+    <h1>Upload a CSV File</h1>
+    <form method="post" action="{% url 'predict_view'%}" enctype="multipart/form-data">
+        {% csrf_token %}
+        <input type="file" name="csv_file" accept=".csv" required>
+        <button type="submit">Upload and Predict</button>
+    </form>
+</body>
+</html>
