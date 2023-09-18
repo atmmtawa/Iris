@@ -2,7 +2,7 @@ from django.shortcuts import render
 import pandas as pd
 from django.http import HttpResponse
 from django.shortcuts import render
-from . import your_machine_learning_model
+from . import ml_model
 
 def predict_view(request):
     if request.method == 'POST':
@@ -10,7 +10,7 @@ def predict_view(request):
         df = pd.read_csv(csv_file)
         
         # Make predictions using your machine learning model
-        predictions = your_machine_learning_model.predict(df)
+        predictions = ml_model.predict(df)
 
         # Add predictions to the DataFrame
         df['predicted_target'] = predictions
