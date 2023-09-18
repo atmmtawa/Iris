@@ -7,5 +7,5 @@ from . import views
 urlpatterns = [
 
     path('', views.classiffier, name ="classiffier"),
-    path('', views.predict_view, name ="predict_view"),
+    # path('', views.predict_view, name ="predict_view"),
 ]
