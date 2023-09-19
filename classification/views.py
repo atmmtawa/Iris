@@ -1,3 +1,4 @@
+from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from .forms import CSVUploadForm
 from .ml_model import load_model
@@ -81,6 +82,106 @@ def upload_csv(request):
             predictions = predict(preprocessed_data)
 
             accuracy = np.mean(numpy_iris_data == predictions) * 100
+
+            # Pass the predictions to the template
+            return render(request, 'classification/results.html', {'predictions': predictions,
+                                                                   'accuracy_score': accuracy})
+    else:
+        form = CSVUploadForm()
+    return render(request, 'classification/upload_csv.html', {'form': form})
+
+
+def classiffier(request):
+    if request.method == "POST":
+        sepal_width = float(request.POST.get("sepal_width"))
+        sepal_length = float(request.POST.get("sepal_length"))
+        petal_width = float(request.POST.get("petal_width"))
+        petal_length = float(request.POST.get("petal_length"))
+
+        input_array = [sepal_length, sepal_width, petal_length, petal_width]
+        answer = int(predict_individually(input_array))
+        reversed_dict = {value: key for key, value in label_mapping.items()}
+
+        print(reversed_dict[answer])
+
+        return render(request, "classiffier.html", {"sepal": reversed_dict[answer]})
+    else:
+        return render(request, "classiffier.html")
+
+
+def preprocess_data(df):
+    # Map the label column to numeric values (assuming 'Species' is the label column)
+    # label_mapping = {
+    #     'Iris-setosa': 0,
+    #     'Iris-versicolor': 1,
+    #     'Iris-virginica': 2
+    # }
+    # df['Species'] = df['Species'].map(label_mapping)
+    # # Add any other data preprocessing steps here if needed
+    # print(df)
+    return df
+
+
+def predict(input_data):
+    # Use the loaded model to make predictions
+    predictions = load_model().predict(input_data)
+    return predictions
+
+
+# def calculate_accuracy(actual_array, predicted_array):
+#     if
+#     pass
+
+
+def predict_csv(request):
+    if request.method == 'POST':
+        form = CSVUploadForm(request.POST, request.FILES)
+        if form.is_valid():
+            # Get the uploaded CSV file
+            csv_file = request.FILES['csv_file']
+
+            # Read the CSV file into a Pandas DataFrame
+            iris_data = pd.read_csv(csv_file)
+            predictions = []
+            for index, row in iris_data.iterrows():
+            # Extract the features from the row
+                sepal_length = row['SepalLengthCm']
+                sepal_width = row['SepalWidthCm']
+                petal_length = row['PetalLengthCm']
+                petal_width = row['PetalWidthCm']
+
+                # Create an input array for prediction
+                input_array = [sepal_length, sepal_width, petal_length, petal_width]
+
+                # Make a prediction using the loaded model
+                prediction = int(predict_individually(input_array))
+                reversed_dict = {value: key for key, value in label_mapping.items()}
+
+                value = reversed_dict[prediction]
+                 # Append the prediction to the list of predictions
+                predictions.append(value)
+                # Append the prediction to the list of predictions
+
+            # Add the predictions as a new column 'predictions' to the DataFrame
+            # iris_data['predictions'] = predictions
+            # iris_data['Species'] = iris_data['Species'].map(label_mapping)
+            # numpy_iris_data = iris_data["Species"].to_numpy()
+
+            # test_iris_data = iris_data.drop("Species", axis=1)
+
+            # # Preprocess the data
+            # preprocessed_data = preprocess_data(test_iris_data)
+
+            # # Make predictions
+            # predictions = predict(preprocessed_data)
+            
+            # accuracy = np.mean(numpy_iris_data == predictions) * 100
+            iris_data['predicted']=predictions
+            response=HttpResponse(content_type = 'text/csv')
+            response['Content-Disposition']='attachment; filename="predictions.csv"'
+            iris_data.to_csv(response, index=False)
+            
+            return response
 
             # Pass the predictions to the template
             return render(request, 'classification/results.html', {'predictions': predictions,

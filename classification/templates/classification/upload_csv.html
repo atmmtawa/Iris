@@ -6,7 +6,7 @@
 </head>
 <body style="text-align: center;">
     <h1>Upload a CSV File</h1>
-    <form method="post" enctype="multipart/form-data">
+    <form method="post" action="{% url 'predict_csv'%}" enctype="multipart/form-data">
         {% csrf_token %}
         {{ form.as_p }}
         <button type="submit">Upload</button>
