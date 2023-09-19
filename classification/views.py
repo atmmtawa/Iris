@@ -135,57 +135,34 @@ def predict(input_data):
 
 def predict_csv(request):
     if request.method == 'POST':
-        form = CSVUploadForm(request.POST, request.FILES)
-        if form.is_valid():
+        # form = CSVUploadForm(request.POST, request.FILES)
+        # if form.is_valid():
+        
             # Get the uploaded CSV file
-            csv_file = request.FILES['csv_file']
+        
+        csv_file = request.FILES['csv_file']
 
-            # Read the CSV file into a Pandas DataFrame
-            iris_data = pd.read_csv(csv_file)
-            predictions = []
-            for index, row in iris_data.iterrows():
-            # Extract the features from the row
-                sepal_length = row['SepalLengthCm']
-                sepal_width = row['SepalWidthCm']
-                petal_length = row['PetalLengthCm']
-                petal_width = row['PetalWidthCm']
+        # Read the CSV file into a Pandas DataFrame
+        iris_data = pd.read_csv(csv_file)
+        predictions = []
+        for index, row in iris_data.iterrows():
+        # Extract the features from the row
+            sepal_length = row['SepalLengthCm']
+            sepal_width = row['SepalWidthCm']
+            petal_length = row['PetalLengthCm']
+            petal_width = row['PetalWidthCm']
+            input_array = [sepal_length, sepal_width, petal_length, petal_width]
+            prediction = int(predict_individually(input_array))
+            reversed_dict = {value: key for key, value in label_mapping.items()}
 
-                # Create an input array for prediction
-                input_array = [sepal_length, sepal_width, petal_length, petal_width]
-
-                # Make a prediction using the loaded model
-                prediction = int(predict_individually(input_array))
-                reversed_dict = {value: key for key, value in label_mapping.items()}
-
-                value = reversed_dict[prediction]
-                 # Append the prediction to the list of predictions
-                predictions.append(value)
-                # Append the prediction to the list of predictions
-
-            # Add the predictions as a new column 'predictions' to the DataFrame
-            # iris_data['predictions'] = predictions
-            # iris_data['Species'] = iris_data['Species'].map(label_mapping)
-            # numpy_iris_data = iris_data["Species"].to_numpy()
-
-            # test_iris_data = iris_data.drop("Species", axis=1)
-
-            # # Preprocess the data
-            # preprocessed_data = preprocess_data(test_iris_data)
-
-            # # Make predictions
-            # predictions = predict(preprocessed_data)
-            
-            # accuracy = np.mean(numpy_iris_data == predictions) * 100
-            iris_data['predicted']=predictions
-            response=HttpResponse(content_type = 'text/csv')
-            response['Content-Disposition']='attachment; filename="predictions.csv"'
-            iris_data.to_csv(response, index=False)
-            
-            return response
-
-            # Pass the predictions to the template
-            return render(request, 'classification/results.html', {'predictions': predictions,
-                                                                   'accuracy_score': accuracy})
+            value = reversed_dict[prediction]
+            predictions.append(value)
+        iris_data['predicted']=predictions
+        response=HttpResponse(content_type = 'text/csv')
+        response['Content-Disposition']='attachment; filename="predictions.csv"'
+        iris_data.to_csv(response, index=False)
+        
+        return response
     else:
         form = CSVUploadForm()
     return render(request, 'classification/upload_csv.html', {'form': form})
