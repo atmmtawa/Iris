@@ -68,3 +68,18 @@ body{
   h2{
   color: #75bb6d;
   }
+
+.result {
+    text-align: center;
+    margin: 0 20%;
+    border: 2px solid green;
+    border-radius: 15px;
+}
+
+.result:hover {
+    text-align: center;
+    margin: 0 20%;
+    border: 6px double pink;
+    border-radius: 20px;
+    background: skyblue;
+}

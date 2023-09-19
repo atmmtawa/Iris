@@ -20,9 +20,11 @@ from django.urls.conf import include
 from django.conf import settings
 from django.conf.urls.static import static
 
+
+app_name = "classification"
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path("", include("classiffication.urls")),
+    path("", include("classification.urls")),
 ]
 
 if settings.DEBUG:

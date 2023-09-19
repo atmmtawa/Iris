@@ -3,16 +3,17 @@
     {%load static%}
   <head>
     <link rel="stylesheet" href="{% static 'style.css'%}">
+    <link rel="stylesheet" href="{% static 'css/style.css'%}">
   </head>
   <body>
     <center>
-      <div class="form" >
+      <div class="form">
         <form action="{% url 'classiffier'%}" method="POST">
           {% csrf_token %}
           <h2>Classiffication Form</h2><br />
           <div class="input">
-            <input required class="input-field" type="text" name="sepal_length" />
-            <label for="email">Enter Flower's sepal length</label>
+            <input id="sepal_length" required class="input-field" type="text" name="sepal_length" />
+            <label for="sepal_length">Enter Flower's sepal length</label>
           </div>
           <div class="input">
             <input required class="input-field" type="text" name="sepal_width" />
@@ -31,12 +32,14 @@
             <input type="submit" value="Submit" />
           </div>
           <br />
+          <a href="{% url 'upload_csv'%}">Upload csv instead</a>
         </form>
-        {% comment %} <a href="{% url "predict_view"%}">Use csv instead</a> {% endcomment %}
       </div>
-      {{sepal}}
     </center>
     <br /><br /><br />
     <br /><br /><br />
+    <div class="result">
+      <h2 style="color: blue;">This is <strong>{{sepal}}</strong> species of the Iris Flower</h2>
+    </div>
   </body>
 </html>
