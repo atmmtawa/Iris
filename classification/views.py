@@ -63,8 +63,8 @@ def predict(input_data):
 
 def upload_csv(request):
     if request.method == 'POST':
-        form = CSVUploadForm(request.POST, request.FILES)
-        if form.is_valid():
+        # form = CSVUploadForm(request.POST, request.FILES)
+        # if form.is_valid():
             # Get the uploaded CSV file
             csv_file = request.FILES['csv_file']
 
@@ -84,11 +84,11 @@ def upload_csv(request):
             accuracy = np.mean(numpy_iris_data == predictions) * 100
 
             # Pass the predictions to the template
-            return render(request, 'classification/results.html', {'predictions': predictions,
+            return render(request, 'results.html', {'predictions': predictions,
                                                                    'accuracy_score': accuracy})
     else:
         form = CSVUploadForm()
-    return render(request, 'classification/upload_csv.html', {'form': form})
+    return render(request, 'upload.html', {'form': form})
 
 
 def classiffier(request):
@@ -164,5 +164,4 @@ def predict_csv(request):
         
         return response
     else:
-        form = CSVUploadForm()
-    return render(request, 'classification/upload_csv.html', {'form': form})
+        return render(request, 'upload.html')
