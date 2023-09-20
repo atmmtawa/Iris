@@ -81,9 +81,6 @@ def upload_csv(request):
             # Preprocess the data
             preprocessed_data = preprocess_data(test_iris_data)
 
-            arr1 = [1,2,3,4,5]
-            arr2 = [0,9,7,5.4]
-
             # Make predictions
             predictions = predict(preprocessed_data)
 
@@ -94,9 +91,12 @@ def upload_csv(request):
 
             accuracy = np.mean(numpy_iris_data == predictions) * 100
 
+            results_view = [iris_data["SepalLengthCm"], iris_data["SepalWidthCm"], iris_data["PetalLengthCm"],
+                            iris_data["PetalWidthCm"], values_predictions]
+
             # Pass the predictions to the template
 
-            return render(request, 'classification/results.html', {'values_predictions': values_predictions,
+            return render(request, 'classification/results.html', {'values_predictions': results_view,
                                                                    'accuracy_score': accuracy})
     else:
         form = CSVUploadForm()
