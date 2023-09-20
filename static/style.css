@@ -14,8 +14,6 @@ body{
   border: none;
   border-bottom: 2px #75bb6d solid;
   transform: border 0.2s ease-in-out;
-  border-top-left-radius: 10px;
-  border-bottom-right-radius: 10px;
   }
   .input label {
   font-size: 20px;
