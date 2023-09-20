@@ -3,21 +3,45 @@
 <head>
     <meta charset="UTF-8">
     <title>ML Results</title>
+    <style>
+        body {
+            background: whitesmoke;
+        }
+        table {
+            border-radius: 15px;
+        }
+        thead {
+            font-weight: bolder;
+        }
+        td {
+            padding: 6px;
+        }
+    </style>
 </head>
 <body>
-    <h2>Accuracy : {{ accuracy_score }}%</h2>
-    <h1>Predicted Values</h1>
+    <h2>Prediction Accuracy : {{ accuracy_score }}%</h2>
+    <h1 style="text-align: center;">Predicted Values</h1>
 
-    <table border="2">
+    <table border="2" style="margin-left: auto; margin-right: auto;">
         <thead>
             <tr>
-                <td>Predicted</td>
+                <td>Sepal Length</td>
+                <td>Sepal Width</td>
+                <td>Petal Length</td>
+                <td>Petal Width</td>
+                <td>Actual Value</td>
+                <td style="background: lightgreen;">Predicted Value</td>
             </tr>
         </thead>
         <tbody>
             {% for prediction in values_predictions %}
                 <tr>
-                    <td>{{ prediction }}</td>
+                    <td>{{ prediction.0 }}</td>
+                    <td>{{ prediction.1 }}</td>
+                    <td>{{ prediction.2 }}</td>
+                    <td>{{ prediction.3 }}</td>
+                    <td>{{ prediction.4 }}</td>
+                    <td style="background: lightgreen;">{{ prediction.5 }}</td>
                 </tr>
             {% endfor %}
         </tbody>

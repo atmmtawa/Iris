@@ -12,10 +12,10 @@ import pandas as pd
 
 # Global Variables
 label_mapping = {
-                'Iris-setosa': 0,
-                'Iris-versicolor': 1,
-                'Iris-virginica': 2
-            }
+    'Iris-setosa': 0,
+    'Iris-versicolor': 1,
+    'Iris-virginica': 2
+}
 
 
 def predict_individually(input_list):
@@ -72,36 +72,37 @@ def upload_csv(request):
     if request.method == 'POST':
         # form = CSVUploadForm(request.POST, request.FILES)
         # if form.is_valid():
-            # Get the uploaded CSV file
-            csv_file = request.FILES['csv_file']
+        # Get the uploaded CSV file
+        csv_file = request.FILES['csv_file']
 
-            # Read the CSV file into a Pandas DataFrame
-            iris_data = pd.read_csv(csv_file)
-            iris_data['Species'] = iris_data['Species'].map(label_mapping)
-            numpy_iris_data = iris_data["Species"].to_numpy()
+        # Read the CSV file into a Pandas DataFrame
+        iris_data = pd.read_csv(csv_file)
+        iris_data['Species'] = iris_data['Species'].map(label_mapping)
+        numpy_iris_data = iris_data["Species"].to_numpy()
 
-            test_iris_data = iris_data.drop("Species", axis=1)
+        test_iris_data = iris_data.drop("Species", axis=1)
 
-            # Preprocess the data
-            preprocessed_data = preprocess_data(test_iris_data)
+        # Preprocess the data
+        preprocessed_data = preprocess_data(test_iris_data)
 
-            # Make predictions
-            predictions = predict(preprocessed_data)
+        # Make predictions
+        predictions = predict(preprocessed_data)
 
-            print(list(predictions))
-            reversed_dict = {value: key for key, value in label_mapping.items()}
-            values_predictions = [reversed_dict[i] for i in list(predictions)]
-            print(values_predictions)
+        print(list(predictions))
+        reversed_dict = {value: key for key, value in label_mapping.items()}
+        values_predictions = [reversed_dict[i] for i in list(predictions)]
+        values_actual = [reversed_dict[i] for i in list(iris_data["Species"])]
+        print(values_predictions)
 
-            accuracy = np.mean(numpy_iris_data == predictions) * 100
+        accuracy = np.mean(numpy_iris_data == predictions) * 100
 
-            results_view = [iris_data["SepalLengthCm"], iris_data["SepalWidthCm"], iris_data["PetalLengthCm"],
-                            iris_data["PetalWidthCm"], values_predictions]
+        results_view = zip(iris_data["SepalLengthCm"], iris_data["SepalWidthCm"], iris_data["PetalLengthCm"],
+                           iris_data["PetalWidthCm"], values_actual, values_predictions)
 
-            # Pass the predictions to the template
+        # Pass the predictions to the template
 
-            return render(request, 'classification/results.html', {'values_predictions': results_view,
-                                                                   'accuracy_score': accuracy})
+        return render(request, 'classification/results.html', {'values_predictions': results_view,
+                                                               'accuracy_score': accuracy})
     else:
         form = CSVUploadForm()
     return render(request, 'upload.html', {'form': form})
@@ -153,16 +154,16 @@ def predict_csv(request):
     if request.method == 'POST':
         # form = CSVUploadForm(request.POST, request.FILES)
         # if form.is_valid():
-        
-            # Get the uploaded CSV file
-        
+
+        # Get the uploaded CSV file
+
         csv_file = request.FILES['csv_file']
 
         # Read the CSV file into a Pandas DataFrame
         iris_data = pd.read_csv(csv_file)
         predictions = []
         for index, row in iris_data.iterrows():
-        # Extract the features from the row
+            # Extract the features from the row
             sepal_length = row['SepalLengthCm']
             sepal_width = row['SepalWidthCm']
             petal_length = row['PetalLengthCm']
@@ -173,14 +174,15 @@ def predict_csv(request):
 
             value = reversed_dict[prediction]
             predictions.append(value)
-        iris_data['predicted']=predictions
-        response=HttpResponse(content_type = 'text/csv')
-        response['Content-Disposition']='attachment; filename="predictions.csv"'
+        iris_data['predicted'] = predictions
+        response = HttpResponse(content_type='text/csv')
+        response['Content-Disposition'] = 'attachment; filename="predictions.csv"'
         iris_data.to_csv(response, index=False)
-        
+
         return response
     else:
         return render(request, 'upload.html')
+
 
 def predict_pdf(request):
     if request.method == 'POST':
@@ -230,4 +232,3 @@ def predict_pdf(request):
         return response
     else:
         return render(request, 'upload.html')
-
