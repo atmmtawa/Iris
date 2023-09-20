@@ -2,7 +2,7 @@ from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from .forms import CSVUploadForm
 from .ml_model import load_model
-
+from reportlab.lib import colors
 from reportlab.lib.pagesizes import letter
 from reportlab.pdfgen import canvas
 
@@ -178,7 +178,6 @@ def predict_csv(request):
     else:
         return render(request, 'upload.html')
 
-
 def predict_pdf(request):
     if request.method == 'POST':
         # Get the uploaded CSV file
@@ -205,22 +204,26 @@ def predict_pdf(request):
         response['Content-Disposition'] = 'attachment; filename="predictions.pdf"'
 
         # Create a PDF document using ReportLab
-        p = canvas.Canvas(response, pagesize=letter)
-        p.drawString(100, 750, "Predicted Data")
+        doc = SimpleDocTemplate(response, pagesize=letter)
+        elements = []
 
-        # Iterate through the DataFrame and add data to the PDF
-        row_height = 700
-        for _, row in iris_data.iterrows():
-            row_height -= 20
-            p.drawString(100, row_height, f"Sepal Length: {row['SepalLengthCm']}")
-            p.drawString(200, row_height, f"Sepal Width: {row['SepalWidthCm']}")
-            p.drawString(300, row_height, f"Petal Length: {row['PetalLengthCm']}")
-            p.drawString(400, row_height, f"Petal Width: {row['PetalWidthCm']}")
-            p.drawString(500, row_height, f"Predicted: {row['predicted']}")
+        # Split the DataFrame into smaller chunks for multiple pages
+        chunk_size = 33  # You can adjust this value based on your needs
+        for i in range(0, len(iris_data), chunk_size):
+            chunk = iris_data.iloc[i:i + chunk_size]
+            data = [list(chunk.columns)] + chunk.values.tolist()
+            table = Table(data, colWidths=[80, 80, 80, 80, 80, 80])
+            table.setStyle(TableStyle([('BACKGROUND', (0, 0), (-1, 0), colors.grey),
+                                       ('TEXTCOLOR', (0, 0), (-1, 0), colors.whitesmoke),
+                                       ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
+                                       ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
+                                       ('BOTTOMPADDING', (0, 0), (-1, 0), 12),
+                                       ('BACKGROUND', (0, 1), (-1, -1), colors.beige),
+                                       ('GRID', (0, 0), (-1, -1), 1, colors.black)]))
+            elements.append(table)
 
-        p.showPage()
-        p.save()
-        
+        doc.build(elements)
         return response
     else:
         return render(request, 'upload.html')
+

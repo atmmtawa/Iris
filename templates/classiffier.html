@@ -1,11 +1,5 @@
-<!DOCTYPE html>
-<html>
-    {%load static%}
-  <head>
-    <link rel="stylesheet" href="{% static 'style.css'%}">
-    <link rel="stylesheet" href="{% static 'css/style.css'%}">
-  </head>
-  <body>
+{% extends "base.html" %}
+{% block content %}
     <center>
       <div class="form">
         <form action="{% url 'classiffier'%}" method="POST">
@@ -43,5 +37,4 @@
         <h2 style="color: blue;">This is <strong>{{sepal}}</strong> species of the Iris Flower</h2>
       {% endif %}
     </div>
-  </body>
-</html>
+    {% endblock content %}

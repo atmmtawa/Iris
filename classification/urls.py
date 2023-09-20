@@ -11,4 +11,5 @@ urlpatterns = [
 
     path('upload/', views.upload_csv, name='upload_csv'),
     path('predict-csv/', views.predict_csv, name='predict_csv'),
+    path('predict-pdf/', views.predict_pdf, name='predict_pdf'),
 ]
