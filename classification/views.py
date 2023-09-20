@@ -3,6 +3,9 @@ from django.shortcuts import render, redirect
 from .forms import CSVUploadForm
 from .ml_model import load_model
 
+from reportlab.lib.pagesizes import letter
+from reportlab.pdfgen import canvas
+
 import numpy as np
 import pandas as pd
 
@@ -161,6 +164,53 @@ def predict_csv(request):
         response=HttpResponse(content_type = 'text/csv')
         response['Content-Disposition']='attachment; filename="predictions.csv"'
         iris_data.to_csv(response, index=False)
+        
+        return response
+    else:
+        return render(request, 'upload.html')
+
+
+def predict_pdf(request):
+    if request.method == 'POST':
+        # Get the uploaded CSV file
+        csv_file = request.FILES['csv_file']
+
+        # Read the CSV file into a Pandas DataFrame
+        iris_data = pd.read_csv(csv_file)
+        predictions = []
+        for index, row in iris_data.iterrows():
+            # Extract the features from the row
+            sepal_length = row['SepalLengthCm']
+            sepal_width = row['SepalWidthCm']
+            petal_length = row['PetalLengthCm']
+            petal_width = row['PetalWidthCm']
+            input_array = [sepal_length, sepal_width, petal_length, petal_width]
+            prediction = int(predict_individually(input_array))
+            reversed_dict = {value: key for key, value in label_mapping.items()}
+            value = reversed_dict[prediction]
+            predictions.append(value)
+        iris_data['predicted'] = predictions
+
+        # Create a PDF response
+        response = HttpResponse(content_type='application/pdf')
+        response['Content-Disposition'] = 'attachment; filename="predictions.pdf"'
+
+        # Create a PDF document using ReportLab
+        p = canvas.Canvas(response, pagesize=letter)
+        p.drawString(100, 750, "Predicted Data")
+
+        # Iterate through the DataFrame and add data to the PDF
+        row_height = 700
+        for _, row in iris_data.iterrows():
+            row_height -= 20
+            p.drawString(100, row_height, f"Sepal Length: {row['SepalLengthCm']}")
+            p.drawString(200, row_height, f"Sepal Width: {row['SepalWidthCm']}")
+            p.drawString(300, row_height, f"Petal Length: {row['PetalLengthCm']}")
+            p.drawString(400, row_height, f"Petal Width: {row['PetalWidthCm']}")
+            p.drawString(500, row_height, f"Predicted: {row['predicted']}")
+
+        p.showPage()
+        p.save()
         
         return response
     else:
