@@ -65,7 +65,7 @@ def predict(input_data):
 #     pass
 
 def home(request):
-    return render(request, "base.html")
+    return render(request, "home.html")
 
 
 def upload_csv(request):
