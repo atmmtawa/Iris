@@ -18,7 +18,7 @@ def predict_individually(input_list):
     return predicted_outcome
 
 
-def classiffier(request):
+def classifier(request):
     if request.method == "POST":
         sepal_width = float(request.POST.get("sepal_width"))
         sepal_length = float(request.POST.get("sepal_length"))
@@ -77,13 +77,21 @@ def upload_csv(request):
             # Preprocess the data
             preprocessed_data = preprocess_data(test_iris_data)
 
+            arr1 = [1,2,3,4,5]
+            arr2 = [0,9,7,5.4]
+
             # Make predictions
             predictions = predict(preprocessed_data)
+
+            print(list(predictions))
+            reversed_dict = {value: key for key, value in label_mapping.items()}
+            values_predictions = [reversed_dict[i] for i in list(predictions)]
+            print(values_predictions)
 
             accuracy = np.mean(numpy_iris_data == predictions) * 100
 
             # Pass the predictions to the template
-            return render(request, 'classification/results.html', {'predictions': predictions,
+            return render(request, 'classification/results.html', {'values_predictions': values_predictions,
                                                                    'accuracy_score': accuracy})
     else:
         form = CSVUploadForm()

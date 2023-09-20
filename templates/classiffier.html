@@ -10,7 +10,7 @@
       <div class="form">
         <form action="{% url 'classiffier'%}" method="POST">
           {% csrf_token %}
-          <h2>Classiffication Form</h2><br />
+          <h2>Classification Form</h2><br />
           <div class="input">
             <input id="sepal_length" required class="input-field" type="text" name="sepal_length" />
             <label for="sepal_length">Enter Flower's sepal length</label>
@@ -39,7 +39,9 @@
     <br /><br /><br />
     <br /><br /><br />
     <div class="result">
-      <h2 style="color: blue;">This is <strong>{{sepal}}</strong> species of the Iris Flower</h2>
+      {% if sepal %}
+        <h2 style="color: blue;">This is <strong>{{sepal}}</strong> species of the Iris Flower</h2>
+      {% endif %}
     </div>
   </body>
 </html>

@@ -83,3 +83,6 @@ body{
     border-radius: 20px;
     background: skyblue;
 }
+td {
+    padding: 12px;
+}

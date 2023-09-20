@@ -1,4 +1,3 @@
-<!-- mlapp/templates/mlapp/results.html -->
 <!DOCTYPE html>
 <html>
 <head>
@@ -8,10 +7,20 @@
 <body>
     <h2>Accuracy : {{ accuracy_score }}%</h2>
     <h1>Predicted Values</h1>
-    <ul>
-        {% for prediction in predictions %}
-            <li>{{ prediction }}</li>
-        {% endfor %}
-    </ul>
+
+    <table border="2">
+        <thead>
+            <tr>
+                <td>Predicted</td>
+            </tr>
+        </thead>
+        <tbody>
+            {% for prediction in values_predictions %}
+                <tr>
+                    <td>{{ prediction }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 </body>
 </html>
