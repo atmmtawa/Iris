@@ -5,6 +5,7 @@ from .ml_model import load_model
 from reportlab.lib import colors
 from reportlab.lib.pagesizes import letter
 from reportlab.pdfgen import canvas
+from reportlab.platypus import SimpleDocTemplate, Table, TableStyle
 
 import numpy as np
 import pandas as pd
@@ -62,6 +63,9 @@ def predict(input_data):
 # def calculate_accuracy(actual_array, predicted_array):
 #     if
 #     pass
+
+def home(request):
+    return render(request, "base.html")
 
 
 def upload_csv(request):

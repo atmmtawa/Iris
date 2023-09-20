@@ -5,8 +5,8 @@ from . import views
 
 appname = "classification"
 urlpatterns = [
-
-    path('', views.classifier, name="classiffier"),
+    path('', views.home, name="home"),
+    path('classiffier/', views.classifier, name="classiffier"),
     # path('', views.predict_view, name ="predict_view"),
 
     path('upload/', views.upload_csv, name='upload_csv'),

@@ -4,21 +4,21 @@
       <div class="form">
         <form action="{% url 'classiffier'%}" method="POST">
           {% csrf_token %}
-          <h2>Classification Form</h2><br />
+          <h2>Classiffication Form</h2><br />
           <div class="input">
-            <input id="sepal_length" required class="input-field" type="text" name="sepal_length" />
+            <input style="height: 3rem;" id="sepal_length" required class="input-field" type="text" name="sepal_length" />
             <label for="sepal_length">Enter Flower's sepal length</label>
           </div>
           <div class="input">
-            <input required class="input-field" type="text" name="sepal_width" />
+            <input style="height: 3rem;" required class="input-field" type="text" name="sepal_width" />
             <label for="password">Enter Flower's sepal width</label>
           </div>
           <div class="input">
-            <input required class="input-field" type="text" name="petal_length" />
+            <input style="height: 3rem;" required class="input-field" type="text" name="petal_length" />
             <label for="email">Enter Flower's petal length</label>
           </div>
           <div class="input">
-            <input required class="input-field" type="text" name="petal_width" />
+            <input style="height: 3rem;" required class="input-field" type="text" name="petal_width" />
             <label for="password">Enter Flower's petal width</label>
           </div>
           <br />
@@ -31,10 +31,10 @@
       </div>
     </center>
     <br /><br /><br />
-    <br /><br /><br />
     <div class="result">
-      {% if sepal %}
-        <h2 style="color: blue;">This is <strong>{{sepal}}</strong> species of the Iris Flower</h2>
-      {% endif %}
+      <h2 style="color: blue;">This is <strong>{{sepal}}</strong> species of the Iris Flower</h2>
     </div>
-    {% endblock content %}
+    <br /><br /><br />
+  </body>
+</html>
+{% endblock content %}
