@@ -47,8 +47,6 @@ body{
   background-color: #f4eeee;
   padding: 2rem;
   box-shadow: 6px 6px 6px #cecece ;
-  border-top-left-radius: 35px;
-  border-bottom-right-radius: 35px;
   }
   .form{
   transform: translateY(7%);
@@ -82,7 +80,4 @@ body{
     border: 6px double pink;
     border-radius: 20px;
     background: skyblue;
-}
-td {
-    padding: 12px;
 }

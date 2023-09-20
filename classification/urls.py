@@ -5,10 +5,11 @@ from . import views
 
 appname = "classification"
 urlpatterns = [
-
-    path('', views.classifier, name="classiffier"),
+    path('', views.home, name="home"),
+    path('classiffier/', views.classifier, name="classiffier"),
     # path('', views.predict_view, name ="predict_view"),
 
     path('upload/', views.upload_csv, name='upload_csv'),
     path('predict-csv/', views.predict_csv, name='predict_csv'),
+    path('predict-pdf/', views.predict_pdf, name='predict_pdf'),
 ]
