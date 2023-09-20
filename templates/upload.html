@@ -5,6 +5,7 @@
   <h1>Upload a CSV File</h1>
   <div class="form">
     <form method="post" enctype="multipart/form-data">
+        <h4>{{message}}</h4>
         {% csrf_token %}<br>
         <input type="file" name="csv_file" accept=".csv" required><br><br>
         <button type="submit">Upload and Predict</button>

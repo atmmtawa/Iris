@@ -104,8 +104,9 @@ def upload_csv(request):
         return render(request, 'classification/results.html', {'values_predictions': results_view,
                                                                'accuracy_score': accuracy})
     else:
+        message="Use csv data with five features (SepalLengthCm, SepalWidthCm, PetalLengthCm, PetalWidthCm, Species )"
         form = CSVUploadForm()
-    return render(request, 'upload.html', {'form': form})
+    return render(request, 'upload.html', {'form': form, 'message':message})
 
 
 def classiffier(request):
@@ -181,7 +182,8 @@ def predict_csv(request):
 
         return response
     else:
-        return render(request, 'upload.html')
+        message="Use csv data with four features (SepalLengthCm, SepalWidthCm, PetalLengthCm, PetalWidthCm)"
+        return render(request, 'upload.html', {'message':message})
 
 
 def predict_pdf(request):
@@ -231,4 +233,5 @@ def predict_pdf(request):
         doc.build(elements)
         return response
     else:
-        return render(request, 'upload.html')
+        message="Use csv data with four features (SepalLengthCm, SepalWidthCm, PetalLengthCm, PetalWidthCm)"
+        return render(request, 'upload.html', {'message':message})
